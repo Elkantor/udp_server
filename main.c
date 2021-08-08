@@ -4,19 +4,22 @@
 
 #include "dependencies.h"
 
+const unsigned int  config_buffer_length_max   = 64000;
+const char*         config_port                = "4950";
+
 int main(void)
 {
-    const int socket_file_descriptor = rpc_helper_network_udp_ipv6_socket_create(rpc_server_config_port);
+    const int socket_file_descriptor = rpc_helper_network_udp_ipv6_socket_create(config_port);
     printf("listener: waiting to recvfrom...\n");
 
     while(1)
     {
         struct sockaddr_storage their_addr;
         socklen_t addr_len = sizeof(their_addr);
-        char buffer[rpc_server_config_buffer_length_max];
+        char buffer[config_buffer_length_max];
 
         // receive data from socket
-        const int numbytes = recvfrom(socket_file_descriptor, buffer, rpc_server_config_buffer_length_max -1 , 0, (struct sockaddr*)&their_addr, &addr_len);
+        const int numbytes = recvfrom(socket_file_descriptor, buffer, config_buffer_length_max -1 , 0, (struct sockaddr*)&their_addr, &addr_len);
         if (numbytes  == -1)
         {
             perror("recvfrom");

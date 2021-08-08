@@ -9,5 +9,4 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#include "rpc_server_config.c"
 #include "rpc_helper_network.c"
