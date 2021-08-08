@@ -1,0 +1,13 @@
+{
+    "name": "udp_server",
+    "version": "0.0.1",
+    "repo": "Elkantor/udp_server",
+    "description": "Simple server using udp",
+    "keywords": ["server", "udp"],
+    "src": 
+    [
+        "dependencies.h",
+        "rpc_helper_network.c",
+        "rpc_server_config.c"
+    ]
+}
