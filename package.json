@@ -1,0 +1,13 @@
+{
+    "name": "rpc_udp_server",
+    "version": "0.0.1",
+    "repo": "Elkantor/rpc_udp_server",
+    "description": "Simple rpc server using udp",
+    "keywords": ["rpc", "udp"],
+    "src": 
+    [
+        "hash.c",
+        "hash.h",
+        "khash.h"
+    ]
+}
