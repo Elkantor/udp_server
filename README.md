@@ -20,7 +20,8 @@ clib install Elkantor/udp_server
 #optionally cd deps/udp_server
 ```
 
-### To test the simple example wich listen on port 4950, and print the message sent from a client, and its address
+### To test the simple example:
+(wich listen on port 4950, and print the message sent from a client, and its address)
 ```bash
 cc server.c -o server
 ./server
