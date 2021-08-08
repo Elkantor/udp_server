@@ -29,7 +29,7 @@ void* udp_server_sockaddr_get(const struct sockaddr* sa)
 }
 
 // create a udp socket with ipv6 on port passed in parameter, return the socket file descriptor
-int udp_server_udp_ipv6_socket_create(const char* port)
+int udp_server_ipv6_socket_create(const char* port)
 {
     struct addrinfo hints   = { 0 };
     hints.ai_family         = AF_INET6;     // set to AF_INET to use IPv4

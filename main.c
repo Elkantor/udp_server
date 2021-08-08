@@ -9,7 +9,7 @@ const char*         config_port                = "4950";
 
 int main(void)
 {
-    const int socket_file_descriptor = rpc_helper_network_udp_ipv6_socket_create(config_port);
+    const int socket_file_descriptor = udp_server_ipv6_socket_create(config_port);
     printf("listener: waiting to recvfrom...\n");
 
     while(1)
@@ -27,7 +27,7 @@ int main(void)
         }
 
         char s[INET6_ADDRSTRLEN];
-        void* client_ip = rpc_helper_network_sockaddr_get((struct sockaddr *)&their_addr);
+        void* client_ip = udp_server_sockaddr_get((struct sockaddr *)&their_addr);
         const char* client_addr = inet_ntop(their_addr.ss_family, client_ip, s, sizeof(s));
         
         printf("listener: got packet from %s\n", client_addr);
