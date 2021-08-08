@@ -6,6 +6,7 @@
     "keywords": ["server", "udp"],
     "src": 
     [
+        "main.c",
         "dependencies.h",
         "rpc_helper_network.c",
         "rpc_server_config.c"
