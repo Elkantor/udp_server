@@ -14,26 +14,18 @@ int main(void)
 
     while(1)
     {
-        struct sockaddr_storage their_addr;
-        socklen_t addr_len = sizeof(their_addr);
-        char buffer[config_buffer_length_max];
-
-        // receive data from socket
-        const int numbytes = recvfrom(socket_file_descriptor, buffer, config_buffer_length_max -1 , 0, (struct sockaddr*)&their_addr, &addr_len);
-        if (numbytes  == -1)
+        udp_server_struct_data data = udp_server_ipv6_data_receive(socket_file_descriptor, config_buffer_length_max);
+        
         {
-            perror("recvfrom");
-            exit(1);
+            char s[INET6_ADDRSTRLEN];
+            void* client_ip                                         = udp_server_sockaddr_get(&data.client_socket_address);
+            const struct sockaddr_storage* client_address_storage   = (struct sockaddr_storage*)client_ip;
+            const char* client_address_text                         = inet_ntop(client_address_storage->ss_family, client_ip, s, sizeof(s));
+            printf("listener: got packet from %s\n", client_address_text);
+            printf("listener: packet is %d bytes long\n", data.bytes);
+            printf("listener: packet contains \"%s\"\n", data.buffer);
         }
 
-        char s[INET6_ADDRSTRLEN];
-        void* client_ip = udp_server_sockaddr_get((struct sockaddr *)&their_addr);
-        const char* client_addr = inet_ntop(their_addr.ss_family, client_ip, s, sizeof(s));
-        
-        printf("listener: got packet from %s\n", client_addr);
-        printf("listener: packet is %d bytes long\n", numbytes);
-        buffer[numbytes] = '\0';
-        printf("listener: packet contains \"%s\"\n", buffer);
     }
 
     close(socket_file_descriptor);

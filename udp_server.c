@@ -9,7 +9,19 @@
     #include <stddef.h>
     #include <stdio.h>
     #include <unistd.h>
+    #include "udp_server_structs"
 #endif
+
+/********** Structures **********/
+typedef struct udp_server_struct_data
+{
+    int bytes;
+    char buffer[64000];
+    struct sockaddr client_socket_address;
+} udp_server_struct_data;
+
+
+/********** Procedures **********/
 
 // get sockaddr IPv4 or IPv6 address:
 void* udp_server_sockaddr_get(const struct sockaddr* sa)
@@ -24,7 +36,7 @@ void* udp_server_sockaddr_get(const struct sockaddr* sa)
 
     // ipv6 address
     struct sockaddr_in6*    socket_address_ipv6 = (struct sockaddr_in6*)sa;
-    struct in6_addr*         socket_address_ip   = &(socket_address_ipv6->sin6_addr);
+    struct in6_addr*        socket_address_ip   = &(socket_address_ipv6->sin6_addr);
     return socket_address_ip;
 }
 
@@ -76,4 +88,41 @@ int udp_server_ipv6_socket_create(const char* port)
     freeaddrinfo(servinfo);
 
     return sockfd;
+}
+
+// receive data to a socket_file_descriptor
+udp_server_struct_data udp_server_ipv6_data_receive(const int socket_file_descriptor, const unsigned int buffer_length_max)
+{
+    struct sockaddr_storage client_address_storage;
+    socklen_t               client_address_lenght   = sizeof(client_address_storage);
+    struct sockaddr*        client_address          = (struct sockaddr *)&client_address_storage;
+
+    udp_server_struct_data data;
+
+    // receive data from socket
+    data.bytes = recvfrom(socket_file_descriptor, data.buffer, buffer_length_max -1 , 0, client_address, &client_address_lenght);
+    if (data.bytes  == -1)
+    {
+        perror("recvfrom");
+        exit(1);
+    }
+
+    //char s[INET6_ADDRSTRLEN];
+    //void* client_ip = udp_server_sockaddr_get((struct sockaddr *)&their_addr);
+    //const char* client_addr = inet_ntop(their_addr.ss_family, client_ip, s, sizeof(s));
+    data.buffer[data.bytes] = '\0';
+
+    return data;
+}
+
+// send data (message) to a socket_file_descriptor
+void udp_server_ipv6_data_send(int socket_file_descriptor, const size_t message_length, const char message[message_length], const struct sockaddr client_address)
+{
+
+    ssize_t result = sendto(socket_file_descriptor, message, message_length, MSG_CONFIRM, &client_address, sizeof(client_address));
+    if (result == -1)
+    {
+        perror("server response");
+        exit(1);
+    }
 }
